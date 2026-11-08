@@ -1,0 +1,5 @@
+/build/
+/build-*/
+/jam_football_league
+/jam_football_league.exe
+.DS_Store
