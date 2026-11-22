@@ -2,10 +2,10 @@
 #define FOOTBALL_LEAGUE_H
 
 #include "fixtures/Fixture.h"
-#include "fixtures/MatchOfficial.h"
+#include "personnel/MatchOfficial.h"
 #include "fixtures/Stadium.h"
 #include "league/FootballTeam.h"
-#include "league/MatchResult.h"
+#include "fixtures/MatchResult.h"
 #include "league/Standing.h"
 #include <memory>
 #include <string>

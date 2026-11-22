@@ -9,11 +9,15 @@ The project combines the league, fixtures and stadiums, team and personnel, and 
 Open a terminal in this folder. Use a C++17 compiler such as `g++`.
 
 ```sh
-g++ -std=c++17 -Iinclude -Iinclude/persistence src/main.cpp src/league/*.cpp src/persistence/*.cpp src/reports/*.cpp -o jam_football_league
+g++ -std=c++17 -Iinclude -Iinclude/persistence src/main.cpp src/*/*.cpp -o jam_football_league
 ./jam_football_league
 ```
 
-In PowerShell with MinGW-w64, use `-o jam_football_league.exe` and run `.\jam_football_league.exe`.
+In PowerShell with MinGW-w64, list the source files explicitly and run `.\jam_football_league.exe`:
+
+```powershell
+g++ -std=c++17 -Iinclude -Iinclude/persistence (Get-ChildItem src -Recurse -Filter *.cpp).FullName -o jam_football_league.exe
+```
 
 ## Try one match
 
@@ -28,11 +32,11 @@ Options 15 and 16 save and reload the league using the file-management module (`
 ## Run the checks
 
 ```sh
-g++ -std=c++17 -Iinclude -Iinclude/persistence tests/LeagueTests.cpp src/league/*.cpp src/persistence/*.cpp src/reports/*.cpp -o league_tests
+g++ -std=c++17 -Iinclude -Iinclude/persistence tests/LeagueTests.cpp src/*/*.cpp -o league_tests
 ./league_tests
 ```
 
-In PowerShell with MinGW-w64, use `-o league_tests.exe` and run `.\league_tests.exe`. See the [test notes](docs/TEST_NOTES.md) for the expected results.
+In PowerShell with MinGW-w64, run `g++ -std=c++17 -Iinclude -Iinclude/persistence tests/LeagueTests.cpp (Get-ChildItem src -Recurse -Filter *.cpp | Where-Object Name -ne main.cpp).FullName -o league_tests.exe`, then `.\league_tests.exe`. See the [test notes](docs/TEST_NOTES.md) for the expected results.
 
 ## Course references
 

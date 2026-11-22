@@ -1,4 +1,4 @@
-#include "league/MatchResult.h"
+#include "fixtures/MatchResult.h"
 #include "league/LeagueRuleError.h"
 
 MatchResult::MatchResult(int homeScore, int awayScore)

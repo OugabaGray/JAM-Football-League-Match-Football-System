@@ -14,14 +14,14 @@ A fixture links to exactly two distinct teams and one stadium. Teams and stadium
 
 ## Agree on the shared class interfaces
 
-All shared classes live in `include/`: `Person`, `Player`, `Coach` and `Spectator` under `personnel/`, and `FootballTeam`, `Stadium`, `MatchOfficial` and `Fixture` with the Section C features merged in (see below). Agree on any signature changes first, then update the calls in the league and driver together.
+Each module has headers under `include/<module>/` and implementation files under `src/<module>/`. `personnel` holds `Person`, `Player`, `Coach`, `Spectator`, `MatchOfficial` and `LeagueCommissioner`. `fixtures` holds `Fixture`, `Stadium` and `MatchResult`. `league` holds `FootballLeague`, `FootballTeam` and `Standing`. `persistence` and `reports` hold the file and report classes. The Section C features are merged in (see below). Agree on any signature changes first, then update the calls in the league and driver together.
 
 | Shared class | What this section needs |
 | --- | --- |
 | `personnel/Person.h` | An abstract base with ID, name, age and gender (all strings except age), and `virtual void display() const = 0`. |
 | `league/FootballTeam.h` | Registration number, name, parish, and pending/registered/suspended status. The league needs to read these values, update team details, approve registration, and suspend a team. |
 | `fixtures/Stadium.h` | Stadium ID, name, location, capacity, `FieldCondition`, ticket price in cents and occupancy. `bookSeats()` refuses sales over capacity. A stadium is playable unless its condition is `Unplayable`. |
-| `fixtures/MatchOfficial.h` | A `Person` subclass with role, rank and availability. The league refuses unavailable officials and checks current bookings when it assigns one. |
+| `personnel/MatchOfficial.h` | A `Person` subclass with role, rank and availability. The league refuses unavailable officials and checks current bookings when it assigns one. |
 | `fixtures/Fixture.h` | Fixture ID, both team IDs, stadium ID, date, kickoff, official IDs, and a result once recorded. The fixture must be able to accept an official or record a score through a method. |
 
 The league keeps one list per shared class and owns every object in it. Make updates through the league. IDs are still the lookup keys and the saved form: when save/load is added, write the IDs and data fields to sequential text files, load teams, stadiums and officials first, then rebuild each fixture with `scheduleFixture`-style lookups so its pointers reconnect to the loaded objects. Reloading results should reproduce the same standings. A fixture's pointers must never outlive the league, and `FootballLeague` is non-copyable for that reason.

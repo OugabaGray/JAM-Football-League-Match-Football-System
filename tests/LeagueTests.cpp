@@ -1,5 +1,5 @@
 #include "league/FootballLeague.h"
-#include "league/LeagueCommissioner.h"
+#include "personnel/LeagueCommissioner.h"
 #include "league/LeagueRuleError.h"
 #include "persistence/FileStore.h"
 #include "FileManager.h"
