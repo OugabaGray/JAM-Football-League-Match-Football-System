@@ -31,7 +31,7 @@ The league keeps one list per shared class and owns every object in it. Make upd
 - A kickoff conflict uses the same date and minute. The brief gives no match length.
 - One assigned official is enough for the demo's readiness check. Discuss actual staffing and availability with the fixtures teammate.
 - Teams are ranked by points, then goal difference, goals scored, team name, and registration number. The 3/1/0 points rule comes from the brief. The tie-break order is proposed for the group to confirm.
-- Approvals, fixtures, and results live in memory in this section. The team and personnel classes, full venue and fixture models, sales and product hierarchy, reports, and persistence belong to the group integration.
+- Approvals, fixtures and results live in memory and are saved and reloaded through the persistence module. Team and personnel, the sales and product hierarchy, and reports are now integrated with the league.
 
 ## Persistence hookup
 

@@ -1,8 +1,8 @@
 # Jamaican Football League Match and Sales System
 
-This is the project and integration lead's C++ section for CIT 2004. It covers team registration and approval, fixture scheduling, official assignments, match scores, and the league table.
+This is the C++ group project for CIT 2004. It manages team registration and approval, squads, fixture scheduling, official assignments, match scores, the league table, ticket sales, the stadium shop, saving and loading, and reports.
 
-The project combines the league, fixtures and stadiums, team and personnel, and file-management sections. See the [integration notes](docs/INTEGRATION_GUIDE.md) for how the parts fit together.
+The project combines the league, fixtures and stadiums, team and personnel, ticketing and shop, and file-management sections. See the [integration notes](docs/INTEGRATION_GUIDE.md) for how the parts fit together.
 
 ## Build and run
 
@@ -47,4 +47,4 @@ In PowerShell with MinGW-w64, run `g++ -std=c++17 -Iinclude -Iinclude/persistenc
 
 ## Course references
 
-The design follows the CIT 2004 class, information hiding, inheritance, exception handling, and polymorphism exercises. The [project brief](Jamaican_Football_League_6_Week_OOP_Group_Project.pdf) covers the full group submission. AI assistance was used to draft and verify this section.
+The design follows the CIT 2004 class, information hiding, inheritance, exception handling, and polymorphism exercises. The [project brief](Jamaican_Football_League_6_Week_OOP_Group_Project.pdf) covers the full group submission. AI assistance was used for coding guidance, troubleshooting and documentation.

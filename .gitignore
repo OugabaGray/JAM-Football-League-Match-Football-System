@@ -4,3 +4,8 @@
 /league_tests
 /league_tests.exe
 .DS_Store
+/sales_demo
+/sales_demo.exe
+/sales_menu_demo
+/sales_menu_demo.exe
+*.o
