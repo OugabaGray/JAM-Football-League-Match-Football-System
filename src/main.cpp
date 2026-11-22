@@ -3,8 +3,11 @@
 #include "league/LeagueRuleError.h"
 #include "persistence/FileStore.h"
 #include "reports/LeagueReports.h"
+#include "sales/LeagueSales.h"
+#include "sales/SalesMenu.h"
 
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 
@@ -93,7 +96,7 @@ static void showMenu() {
               << "13. List fixtures         14. Show standings\n"
               << "15. Save data             16. Load data\n"
               << "17. Reports               18. Postpone fixture\n"
-              << "19. Official availability 20. Reserve seats\n"
+              << "19. Official availability 20. Ticketing and shop\n"
               << "21. Add player            22. Update player\n"
               << "23. Remove player         24. Add coach\n"
               << "25. Update coach          26. Remove coach\n"
@@ -103,7 +106,8 @@ static void showMenu() {
 }
 
 // Each menu choice reads input and calls a class method. The class checks the rules.
-static void runChoice(int choice, FootballLeague& league, const LeagueCommissioner& commissioner) {
+static void runChoice(int choice, FootballLeague& league, const LeagueCommissioner& commissioner,
+                      StadiumShop& shop, std::map<std::string, Spectator>& spectators) {
     switch (choice) {
         case 1: {
             std::string id = readText("Registration number: ");
@@ -309,15 +313,10 @@ static void runChoice(int choice, FootballLeague& league, const LeagueCommission
             std::cout << "Availability updated.\n";
             break;
         }
-        case 20: {
-            std::string id = readText("Stadium ID: ");
-            int seats = readNumber("Seats to reserve: ");
-            league.reserveSeats(id, seats);
-            const Stadium& stadium = league.getStadium(id);
-            std::cout << stadium.getCurrentOccupancy() << " of " << stadium.getSeatingCapacity()
-                      << " seats taken.\n";
+        case 20:
+            registerLeagueFixtures(league, shop);
+            runSalesMenu(shop, spectators);
             break;
-        }
         case 17: {
             // Show one report, then save it as text and CSV in data/reports/.
             std::cout << "1 Standings  2 Fixtures  3 Official assignments  4 Team status\n";
@@ -351,6 +350,8 @@ static void runChoice(int choice, FootballLeague& league, const LeagueCommission
 int main() {
     // One league object holds the teams, fixtures, and results for this run.
     FootballLeague league;
+    StadiumShop shop;
+    std::map<std::string, Spectator> spectators;
     LeagueCommissioner commissioner("LC01", "Demo Commissioner", 35, "Unspecified");
     showPerson(commissioner);
 
@@ -362,7 +363,7 @@ int main() {
             if (choice == 0) {
                 break;
             }
-            runChoice(choice, league, commissioner);
+            runChoice(choice, league, commissioner, shop, spectators);
         } catch (const LeagueRuleError& error) {
             if (!std::cin) {
                 break;

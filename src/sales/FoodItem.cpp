@@ -1,4 +1,4 @@
-#include "../../include/sales/FoodItem.h"
+#include "sales/FoodItem.h"
 
 #include <iomanip>
 #include <sstream>

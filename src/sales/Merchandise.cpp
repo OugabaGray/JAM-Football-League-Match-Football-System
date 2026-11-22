@@ -1,4 +1,4 @@
-#include "../../include/sales/Merchandise.h"
+#include "sales/Merchandise.h"
 
 #include <iomanip>
 #include <sstream>

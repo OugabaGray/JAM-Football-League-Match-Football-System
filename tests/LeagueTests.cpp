@@ -5,6 +5,9 @@
 #include "FileManager.h"
 #include "reports/LeagueReports.h"
 #include "personnel/Spectator.h"
+#include "sales/FoodItem.h"
+#include "sales/LeagueSales.h"
+#include "sales/Merchandise.h"
 
 #include <cstdlib>
 #include <filesystem>
@@ -450,6 +453,87 @@ static void testSquads() {
           "Players and spectators print their own roles through Person");
 }
 
+static void testSales() {
+    FootballLeague league;
+    league.registerTeam(FootballTeam("A", "Harbour FC", "Kingston"));
+    league.registerTeam(FootballTeam("B", "Metro FC", "St Andrew"));
+    league.registerTeam(FootballTeam("C", "Cedar FC", "St Catherine"));
+    league.registerTeam(FootballTeam("D", "Valley FC", "St Thomas"));
+    for (const char* id : {"A", "B", "C", "D"}) {
+        league.approveTeam(id);
+    }
+    league.registerStadium(Stadium("S1", "Tiny Park", "Kingston", 2, FieldCondition::Good, 115000));
+    league.scheduleFixture("F1", "A", "B", "S1", "2026-12-01", "15:00");
+    league.scheduleFixture("F2", "C", "D", "S1", "2026-12-08", "15:00");
+    league.scheduleFixture("F3", "A", "C", "S1", "2026-12-15", "15:00");
+    league.scheduleFixture("F4", "B", "D", "S1", "2026-12-22", "15:00");
+    league.postponeFixture("F3");
+    league.recordResult("F4", MatchResult(1, 1));
+
+    StadiumShop shop;
+    registerLeagueFixtures(league, shop);
+    check(shop.hasFixture("F1") && shop.hasFixture("F2"),
+          "Scheduled league fixtures are registered for ticket sales");
+    check(!shop.hasFixture("F3") && !shop.hasFixture("F4"),
+          "Postponed and completed fixtures are not registered for sales");
+    registerLeagueFixtures(league, shop);
+    check(shop.getTicketsSold("F1") == 0, "Registering the fixtures twice is harmless");
+
+    Spectator fan("S1", "Fan One", 30, "F");
+    SaleReceipt receipt = shop.sellTicket("T1", fan.getId(), "F1", "General", 115000);
+    check(receipt.totalInCents == 115000 && receipt.taxInCents == 15000 &&
+          receipt.subtotalInCents == 100000 && receipt.changeInCents == 0,
+          "A ticket at the stadium's price includes 15 percent GCT");
+    check(shop.sellTicket("T2", fan.getId(), "F1", "General", 120000).changeInCents == 5000,
+          "A ticket sale returns the correct change");
+    try {
+        shop.sellTicket("T3", fan.getId(), "F1", "General", 115000);
+        check(false, "Reject a ticket sale past the stadium capacity");
+    } catch (const LeagueRuleError&) {
+        check(shop.getTicketsSold("F1") == 2, "Reject a ticket sale past the stadium capacity");
+    }
+    check(shop.sellTicket("T4", fan.getId(), "F2", "General", 115000).totalInCents == 115000,
+          "Another fixture at the same stadium has its own seats");
+    try {
+        shop.sellTicket("T5", fan.getId(), "F2", "General", 100);
+        check(false, "Reject a ticket with insufficient payment");
+    } catch (const LeagueRuleError&) {
+        check(shop.getTicketsSold("F2") == 1, "Reject a ticket with insufficient payment");
+    }
+    try {
+        shop.sellTicket("T6", fan.getId(), "F3", "General", 115000);
+        check(false, "Reject a ticket for a postponed fixture");
+    } catch (const SalesError&) {
+        check(true, "Reject a ticket for a postponed fixture");
+    }
+
+    shop.addProduct(std::make_unique<Merchandise>("M1", "Jersey", 230000, 2, "Medium", "Harbour FC"));
+    shop.addProduct(std::make_unique<FoodItem>("F1", "Water", 11500, 10, "Beverage"));
+    check(shop.purchaseProduct("S1", "M1", 1, 250000).changeInCents == 20000,
+          "A shop purchase returns the correct change");
+    try {
+        shop.purchaseProduct("S1", "M1", 2, 460000);
+        check(false, "Reject buying more than the stock");
+    } catch (const LeagueRuleError&) {
+        check(shop.findProduct("M1").getStockQuantity() == 1, "Reject buying more than the stock");
+    }
+    try {
+        shop.purchaseProduct("S1", "F1", 0, 0);
+        check(false, "Reject a zero quantity purchase");
+    } catch (const LeagueRuleError&) {
+        check(shop.findProduct("F1").getStockQuantity() == 10, "Reject a zero quantity purchase");
+    }
+
+    std::vector<const Product*> items = {&shop.findProduct("M1"), &shop.findProduct("F1")};
+    std::ostringstream output;
+    for (const Product* item : items) {
+        item->display(output);
+    }
+    check(output.str().find("Merchandise") != std::string::npos &&
+          output.str().find("FoodItem") != std::string::npos,
+          "Products print their own type through Product");
+}
+
 static void testReports() {
     FootballLeague league;
     // Boundary: an empty league still produces valid, empty reports.
@@ -659,6 +743,7 @@ int main() {
         testReports();
         testVenueAndOfficials();
         testSquads();
+        testSales();
     } catch (const LeagueRuleError& error) {
         check(false, std::string("Unexpected exception: ") + error.what());
     }

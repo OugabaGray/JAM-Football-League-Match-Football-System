@@ -3,6 +3,7 @@
 
 #include "Product.h"
 #include "Ticket.h"
+#include "league/LeagueRuleError.h"
 
 #include <map>
 #include <memory>
@@ -11,11 +12,11 @@
 #include <vector>
 
 // Custom exception for sales business-rule violations.
-class SalesError : public std::runtime_error
+class SalesError : public LeagueRuleError
 {
 public:
     explicit SalesError(const std::string& message)
-        : std::runtime_error(message)
+        : LeagueRuleError(message)
     {
     }
 };
@@ -82,6 +83,8 @@ public:
         const std::string& fixtureId,
         int capacity,
         std::int64_t ticketPriceInCents);
+
+    bool hasFixture(const std::string& fixtureId) const;
 
     int getTicketsSold(const std::string& fixtureId) const;
 

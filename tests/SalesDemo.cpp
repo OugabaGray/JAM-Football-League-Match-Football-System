@@ -1,6 +1,6 @@
-#include "../include/sales/StadiumShop.h"
-#include "../include/sales/Merchandise.h"
-#include "../include/sales/FoodItem.h"
+#include "sales/StadiumShop.h"
+#include "sales/Merchandise.h"
+#include "sales/FoodItem.h"
 
 #include <iostream>
 #include <memory>

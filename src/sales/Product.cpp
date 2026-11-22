@@ -1,4 +1,4 @@
-#include "../../include/sales/Product.h"
+#include "sales/Product.h"
 
 #include <limits>
 #include <stdexcept>

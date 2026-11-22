@@ -1,7 +1,7 @@
-#include "../../include/sales/SalesMenu.h"
-#include "../../include/sales/Spectator.h"
-#include "../../include/sales/Merchandise.h"
-#include "../../include/sales/FoodItem.h"
+#include "sales/SalesMenu.h"
+#include "personnel/Spectator.h"
+#include "sales/Merchandise.h"
+#include "sales/FoodItem.h"
 
 #include <iostream>
 #include <limits>
@@ -235,9 +235,13 @@ static std::map<std::string, Spectator> loadSpectators(
 }
 void runSalesMenu(StadiumShop& shop)
 {
-    // Spectators registered during this menu session.
     std::map<std::string, Spectator> spectators;
+    runSalesMenu(shop, spectators);
+}
 
+void runSalesMenu(StadiumShop& shop,
+    std::map<std::string, Spectator>& spectators)
+{
     const int maximum = (std::numeric_limits<int>::max)();
 
     try
@@ -350,7 +354,7 @@ void runSalesMenu(StadiumShop& shop)
 
                         const SaleReceipt receipt =
                             shop.purchaseProduct(
-                                customer->second.getSpectatorId(),
+                                customer->second.getId(),
                                 productId,
                                 quantity,
                                 payment);
@@ -374,7 +378,7 @@ void runSalesMenu(StadiumShop& shop)
                         const SaleReceipt receipt =
                             shop.sellTicket(
                                 ticketId,
-                                customer->second.getSpectatorId(),
+                                customer->second.getId(),
                                 fixtureId,
                                 category,
                                 payment);

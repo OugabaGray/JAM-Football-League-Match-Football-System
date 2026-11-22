@@ -1,4 +1,4 @@
-#include "../../include/sales/Ticket.h"
+#include "sales/Ticket.h"
 
 #include <iomanip>
 #include <sstream>

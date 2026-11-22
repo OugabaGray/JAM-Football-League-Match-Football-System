@@ -1,6 +1,6 @@
-#include "../../include/sales/StadiumShop.h"
-#include "../../include/sales/Merchandise.h"
-#include "../../include/sales/FoodItem.h"
+#include "sales/StadiumShop.h"
+#include "sales/Merchandise.h"
+#include "sales/FoodItem.h"
 
 #include <fstream>
 #include <iomanip>
@@ -661,6 +661,11 @@ void StadiumShop::registerFixture(
     info.ticketPriceInCents = ticketPriceInCents;
 
     fixtures.emplace(fixtureId, info);
+}
+
+bool StadiumShop::hasFixture(const std::string& fixtureId) const
+{
+    return fixtures.find(fixtureId) != fixtures.end();
 }
 
 // Count issued tickets for one specific fixture.

@@ -7,7 +7,7 @@
 
 ## Build the Interactive Demonstration
 ```powershell
-cl /nologo /std:c++17 /EHsc /W4 /Iinclude tests/SalesMenuDemo.cpp src/personnel/Person.cpp src/sales/Spectator.cpp src/sales/Product.cpp src/sales/Merchandise.cpp src/sales/FoodItem.cpp src/sales/Ticket.cpp src/sales/StadiumShop.cpp src/sales/SalesMenu.cpp /Fe:SalesMenuDemo.exe
+cl /nologo /std:c++17 /EHsc /W4 /Iinclude /Iinclude/persistence tests/SalesMenuDemo.cpp src/personnel/Person.cpp src/personnel/Spectator.cpp src/sales/Product.cpp src/sales/Merchandise.cpp src/sales/FoodItem.cpp src/sales/Ticket.cpp src/sales/StadiumShop.cpp src/sales/SalesMenu.cpp /Fe:SalesMenuDemo.exe
 ```
 
 ## Run
@@ -55,5 +55,4 @@ Expected final message: ALL DEMONSTRATION TESTS PASSED.
 The interactive demonstration has its own main function.
 Build it separately from SalesDemo.cpp and src/main.cpp.
 
-The group application can include sales/SalesMenu.h and call
-runSalesMenu(shop) using its StadiumShop object.
+The group application is connected: option 20 of the main menu registers the league's scheduled fixtures for ticket sales (capacity and price come from each fixture's stadium) and opens this menu. Spectators come from personnel/Spectator.h.

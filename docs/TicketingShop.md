@@ -5,8 +5,8 @@ This module manages spectators, ticket sales, shop inventory,
 payments, tax calculations, receipts and sales reports.
 
 ## Classes
-- Spectator: Inherits from the shared Person class and represents
-  a customer purchasing tickets or products.
+- Spectator (personnel module): Inherits from the shared Person class
+  and represents a customer purchasing tickets or products.
 - Ticket: Stores the ticket ID, spectator ID, fixture ID,
   category and tax-inclusive price.
 - Product: Abstract superclass containing product ID, name,
@@ -65,11 +65,14 @@ purchase, and spectator restoration after restarting.
 Evidence: Screenshots of the passing demonstration, purchase
 receipt and restored spectator.
 
-## Remaining Integration
-Connect the sales menu to the group's main program and obtain
-fixture capacities and prices from the shared stadium and
-fixture classes. The standalone menu currently accepts these
-details manually.
+## Integration
+The sales menu is option 20 of the main program. Before it opens,
+registerLeagueFixtures registers every scheduled league fixture for
+ticket sales, taking the capacity and ticket price from the fixture's
+stadium. Postponed and completed fixtures are skipped. Seats are counted
+per fixture, so two fixtures at the same stadium each have the full
+capacity. SalesError derives from LeagueRuleError, and Spectator is the
+shared class in personnel/Spectator.h.
 
 ## Development Acknowledgment
 AI assistance was used to develop and troubleshoot this module.

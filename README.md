@@ -27,13 +27,20 @@ g++ -std=c++17 -Iinclude -Iinclude/persistence (Get-ChildItem src -Recurse -Filt
 4. Assign `R1` to `F1` with option 10, then inspect the fixture with option 11.
 5. Record a 2–0 score with option 12 and open the standings with option 14. The home team should have 3 points and the away team 0.
 
-Options 15 and 16 save and reload the league using the file-management module (`include/persistence`, `src/persistence`, guide in `docs/FILE_MODULE_GUIDE.md`). Files go in `data/`, relative to where you run the program. Option 17 shows one of four reports and saves it as text and CSV in `data/reports/`. Options 18 to 20 postpone a fixture, set an official's availability and reserve stadium seats. Options 21 to 29 manage squads: add, update and remove players and coaches, show a squad, search teams and record player goals.
+Options 15 and 16 save and reload the league using the file-management module (`include/persistence`, `src/persistence`, guide in `docs/FILE_MODULE_GUIDE.md`). Files go in `data/`, relative to where you run the program. Option 17 shows one of four reports and saves it as text and CSV in `data/reports/`. Options 18 and 19 postpone a fixture and set an official's availability. Option 20 opens the ticketing and shop menu: the league's scheduled fixtures are registered for ticket sales with their stadium's capacity and price, and the menu handles spectators, products, purchases, receipts, reports and the shop's own save and load (see `docs/TicketingShop.md`). Options 21 to 29 manage squads: add, update and remove players and coaches, show a squad, search teams and record player goals.
 
 ## Run the checks
 
 ```sh
 g++ -std=c++17 -Iinclude -Iinclude/persistence tests/LeagueTests.cpp src/*/*.cpp -o league_tests
 ./league_tests
+```
+
+The sales module also has its own demonstration tests:
+
+```sh
+g++ -std=c++17 -Iinclude tests/SalesDemo.cpp src/sales/Product.cpp src/sales/Merchandise.cpp src/sales/FoodItem.cpp src/sales/Ticket.cpp src/sales/StadiumShop.cpp -o sales_demo
+./sales_demo
 ```
 
 In PowerShell with MinGW-w64, run `g++ -std=c++17 -Iinclude -Iinclude/persistence tests/LeagueTests.cpp (Get-ChildItem src -Recurse -Filter *.cpp | Where-Object Name -ne main.cpp).FullName -o league_tests.exe`, then `.\league_tests.exe`. See the [test notes](docs/TEST_NOTES.md) for the expected results.
