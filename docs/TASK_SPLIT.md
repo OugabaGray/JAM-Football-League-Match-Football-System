@@ -1,21 +1,46 @@
 # Remaining work split
 
-| Person | Area | Remaining work |
-| --- | --- | --- |
-| Ougaba Gray | Project lead and integration | Design & UML section, Introduction fixes, Conclusion and References. Merge the report and slides, build the final package, lead the demo. |
-| Sian Sudine | Ticketing and shop | Update her log's Remaining Work. Write the sales part of Implementation (receipts, GCT). Add the sales tests to the test notes with screenshots. |
-| Tajay Smith | Team and personnel | Write the Person hierarchy and squad rules part of Implementation. Write the standalone user guide (menu options 21-29 included). |
-| Jareel | File management | Write the persistence and reports part of Implementation (file formats, safe load, four reports). Prepare the demo sample data in `data/`. |
-| Zidan | Fixtures and league operations | Write the fixtures and league part of Implementation (conflicts, officials, results, standings, custom exception). Write Testing & Results from the league tests and `docs/TEST_NOTES.md`. |
+## Ougaba Gray (project lead and integration)
+- [ ] Design & UML section of the report
+- [ ] Fix the Introduction ("pending" wording, group members, date)
+- [ ] Conclusion and References
+- [ ] Merge all report sections into one document
+- [ ] Merge everyone's slides into one deck
+- [ ] Final package (compressed folder named as the lecturer says, no build folders)
+- [ ] Fix the GitHub push
+- [ ] Contribution log (drafted, check it) and individual reflection
+- [ ] Lead the demo
+
+## Sian Sudine (ticketing and shop)
+- [ ] Update her contribution log's Remaining Work
+- [ ] Implementation section: sales, receipts, GCT
+- [ ] Add the sales tests to `docs/TEST_NOTES.md`, with screenshots
+- [ ] Individual reflection
+- [ ] Ticketing and shop slides
+
+## Tajay Smith (team and personnel)
+- [ ] Implementation section: Person hierarchy, squads, minimum age, jersey rules
+- [ ] Standalone user guide (include menu options 21-29)
+- [ ] Contribution log and individual reflection
+- [ ] Team and personnel slides
+
+## Jareel (file management)
+- [ ] Prepare the demo sample data in `data/`
+- [ ] Implementation section: persistence and reports (file formats, safe load, four reports)
+- [ ] Contribution log and individual reflection
+- [ ] Persistence and reports slides
+
+## Zidan (fixtures and league operations)
+- [ ] Implementation section: fixtures and league (conflicts, officials, results, standings, custom exception)
+- [ ] Testing & Results section, from the league tests and `docs/TEST_NOTES.md`
+- [ ] Contribution log and individual reflection
+- [ ] Fixtures and league slides
 
 ## Everyone
-- Own contribution log.
-- Own individual reflection.
-- Own section of the slides.
 - Rehearse the demo. Every member speaks and answers a technical question.
 
 ## Order
-1. Sample data (Jareel) and test notes (Sian, Zidan)
+1. Sample data (Jareel), test notes (Sian, Zidan)
 2. Report sections in parallel
 3. User guide (Tajay)
 4. Ougaba merges the report and slides
