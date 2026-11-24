@@ -12,6 +12,7 @@ public:
     static Report fixtures(const FootballLeague& league);        // every fixture with status and score
     static Report officialAssignments(const FootballLeague& league); // matches per official
     static Report teamStatus(const FootballLeague& league);      // registration status per team
+    static Report stadiumSummary(const FootballLeague& league);  // capacity, price and fixtures per stadium
 };
 
 #endif

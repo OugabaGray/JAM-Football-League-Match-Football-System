@@ -75,3 +75,14 @@ std::string ReportGenerator::money(double amount) {
     for (int i = static_cast<int>(dot) - 3; i > static_cast<int>(start); i -= 3) s.insert(i, ",");
     return "$" + s;
 }
+
+// Money is stored as integer cents across the project, so no floating-point rounding is involved
+std::string ReportGenerator::moneyCents(long long cents, const std::string& symbol) {
+    bool neg = cents < 0;
+    unsigned long long a = static_cast<unsigned long long>(neg ? -cents : cents);
+    std::string whole = std::to_string(a / 100);
+    for (int i = static_cast<int>(whole.size()) - 3; i > 0; i -= 3) whole.insert(i, ",");
+    std::string frac = std::to_string(a % 100);
+    if (frac.size() < 2) frac = "0" + frac;
+    return std::string(neg ? "-" : "") + symbol + whole + "." + frac;
+}

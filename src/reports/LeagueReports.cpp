@@ -86,3 +86,34 @@ Report LeagueReports::teamStatus(const FootballLeague& league) {
     report.footer = "Registered teams: " + std::to_string(registered);
     return report;
 }
+
+Report LeagueReports::stadiumSummary(const FootballLeague& league) {
+    Report report;
+    report.title = "Stadium Summary";
+    report.headers = {"ID", "Stadium", "Capacity", "Condition", "Ticket price", "Hosted", "Upcoming",
+                      "Full-house gate"};
+    for (const Stadium* stadium : league.getStadiums()) {
+        int hosted = 0;
+        int upcoming = 0;
+        for (const Fixture& fixture : league.getFixtures()) {
+            if (fixture.getStadium().getId() != stadium->getId()) {
+                continue;
+            }
+            if (fixture.isCompleted()) {
+                hosted++;
+            } else if (!fixture.isPostponed()) {
+                upcoming++;
+            }
+        }
+        long long gate = static_cast<long long>(stadium->getSeatingCapacity()) *
+                         stadium->getTicketPriceCents();
+        report.rows.push_back({stadium->getId(), stadium->getName(),
+                               std::to_string(stadium->getSeatingCapacity()),
+                               fieldConditionName(stadium->getFieldCondition()),
+                               ReportGenerator::moneyCents(stadium->getTicketPriceCents()),
+                               std::to_string(hosted), std::to_string(upcoming),
+                               ReportGenerator::moneyCents(gate)});
+    }
+    report.footer = "Full-house gate is capacity times ticket price (GCT included).";
+    return report;
+}

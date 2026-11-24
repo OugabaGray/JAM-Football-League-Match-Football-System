@@ -7,6 +7,7 @@
 #include <fstream>
 #include <type_traits>
 #include <algorithm>
+#include <filesystem>
 #include "Persistable.h"
 
 // Central file names so every module uses the same ones
@@ -21,6 +22,14 @@ namespace DataFiles {
     const std::string PRODUCTS_BIN = "data/products.bin";   // random access
     const std::string TICKETS_BIN  = "data/tickets.bin";    // random access
 }
+
+// Outcome of a safe load: tells the caller what happened without throwing
+struct LoadResult {
+    bool ok = false;               // true when new data was accepted
+    bool usedBackup = false;       // true when the .bak copy had to be used
+    size_t loaded = 0;             // records accepted
+    std::vector<std::string> messages;   // reasons for any rejection / recovery
+};
 
 class FileManager {
 public:
@@ -52,10 +61,56 @@ public:
             ++lineNo;
             try { out.push_back(factory(Codec::split(line))); }
             catch (const DataFormatException& e) {
-                throw DataFormatException(path + ", record " + std::to_string(lineNo) + ": " + e.what());
+                std::string m = e.what();
+                const std::string pre = "Data format error: ";
+                if (m.rfind(pre, 0) == 0) m = m.substr(pre.size());      // avoid a doubled prefix
+                throw DataFormatException(path + ", record " + std::to_string(lineNo) + ": " + m);
             }
         }
         return out;
+    }
+
+    // ---------- Safe load ----------
+    // Loads into a TEMPORARY vector, validates it, and only then replaces 'target'.
+    // If the file is missing/corrupt/invalid and a .bak copy exists, the backup is tried next;
+    // the bad file is kept as <path>.corrupt and the backup is restored in its place.
+    // On total failure 'target' is left exactly as it was (no half-loaded state).
+    template <class T>
+    static LoadResult safeLoad(std::vector<T>& target, const std::string& path,
+                               const std::function<T(const std::vector<std::string>&)>& factory,
+                               const std::function<void(const std::vector<T>&)>& validator = nullptr,
+                               bool tryBackup = true) {
+        LoadResult res;
+        auto attempt = [&](const std::string& p, std::vector<T>& out) -> bool {
+            try {
+                out = loadCollection<T>(p, factory, false);
+                if (validator) validator(out);
+                return true;
+            } catch (const std::exception& e) {
+                res.messages.push_back("Rejected " + p + " - " + e.what());
+                return false;
+            }
+        };
+        std::vector<T> staged;
+        if (attempt(path, staged)) {
+            res.ok = true; res.loaded = staged.size();
+            target = std::move(staged);
+            return res;
+        }
+        const std::string bak = path + ".bak";
+        if (tryBackup && exists(bak) && attempt(bak, staged)) {
+            try {
+                if (exists(path)) std::filesystem::copy_file(path, path + ".corrupt",
+                                       std::filesystem::copy_options::overwrite_existing);
+                std::filesystem::copy_file(bak, path, std::filesystem::copy_options::overwrite_existing);
+            } catch (const std::exception& e) {
+                res.messages.push_back(std::string("Could not restore backup file: ") + e.what());
+            }
+            res.ok = true; res.usedBackup = true; res.loaded = staged.size();
+            res.messages.push_back("Recovered " + path + " from backup (" + std::to_string(staged.size()) + " records)");
+            target = std::move(staged);
+        }
+        return res;
     }
 
     // ---------- Utilities ----------

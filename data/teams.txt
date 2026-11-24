@@ -1,0 +1,7 @@
+# KPFL data | teams | saved 2026-11-24 06:11:27
+KPFL-001|Kingston Harbour FC|Kingston|1
+KPFL-002|Half Way Tree United|St. Andrew|1
+KPFL-003|Papine Rovers|St. Andrew|1
+KPFL-004|Rae Town Rangers|Kingston|1
+KPFL-005|Cross Roads Athletic|Kingston|1
+KPFL-006|Hope Road FC|St. Andrew|2

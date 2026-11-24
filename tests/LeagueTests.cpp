@@ -343,6 +343,76 @@ static void expectRuleError(const std::string& name, void (*action)()) {
     }
 }
 
+static void writeFile(const std::string& path, const std::string& text);
+
+// Safe loading (backup recovery), money formatting, the stadium report and the demonstration data.
+static void testSafeLoadAndSampleData(const std::filesystem::path& repoRoot) {
+    namespace fs = std::filesystem;
+    fs::path work = fs::temp_directory_path() / "kpfl_safeload_test";
+    fs::remove_all(work);
+    fs::create_directories(work);
+    fs::current_path(work);
+
+    check(ReportGenerator::moneyCents(150000) == "J$1,500.00", "Cents are shown as dollars with a comma");
+    check(ReportGenerator::moneyCents(5) == "J$0.05" && ReportGenerator::moneyCents(0) == "J$0.00",
+          "Small and zero amounts are formatted with two decimals");
+
+    std::function<Stadium(const std::vector<std::string>&)> factory = Stadium::fromRecord;
+    writeFile("good.txt", "S1|Oval|Kingston|3000|1|150000|0\n");
+    std::vector<Stadium> target;
+    LoadResult clean = FileManager::safeLoad<Stadium>(target, "good.txt", factory);
+    check(clean.ok && !clean.usedBackup && target.size() == 1, "Safe load accepts a clean file");
+
+    // A damaged file with no backup is rejected and the data already in memory stays as it was.
+    writeFile("bad.txt", "S2|Park|Kingston|many|1|100|0\n");
+    LoadResult rejected = FileManager::safeLoad<Stadium>(target, "bad.txt", factory);
+    check(!rejected.ok && target.size() == 1 && target[0].getId() == "S1" && !rejected.messages.empty(),
+          "Safe load rejects a damaged file and leaves the current data untouched");
+
+    // A damaged file with a good backup is recovered, and the damaged copy is kept.
+    writeFile("bad.txt.bak", "S3|Ground|Kingston|50|2|50000|0\n");
+    LoadResult recovered = FileManager::safeLoad<Stadium>(target, "bad.txt", factory);
+    check(recovered.ok && recovered.usedBackup && target.size() == 1 && target[0].getId() == "S3",
+          "Safe load recovers a damaged file from its backup");
+    check(fs::exists("bad.txt.corrupt"), "The damaged file is kept as .corrupt");
+
+    // A validator that rejects the data is treated like a damaged file.
+    std::function<void(const std::vector<Stadium>&)> noSmall = [](const std::vector<Stadium>& v) {
+        for (const Stadium& st : v) {
+            if (st.getSeatingCapacity() < 100) throw DataFormatException("capacity below 100");
+        }
+    };
+    LoadResult invalid = FileManager::safeLoad<Stadium>(target, "good.txt", factory, noSmall, false);
+    check(invalid.ok && target.size() == 1 && target[0].getId() == "S1", "A validator accepts valid data");
+    LoadResult failedValidator = FileManager::safeLoad<Stadium>(target, "bad.txt", factory, noSmall, false);
+    check(!failedValidator.ok && target[0].getId() == "S1",
+          "A validator rejection leaves the current data untouched");
+
+    FootballLeague league;
+    league.registerStadium(Stadium("S1", "Oval", "Kingston", 3000, FieldCondition::Good, 150000));
+    Report gate = LeagueReports::stadiumSummary(league);
+    check(gate.rows.size() == 1 && gate.rows[0][4] == "J$1,500.00" && gate.rows[0][7] == "J$4,500,000.00",
+          "Stadium report shows the ticket price and the full-house gate");
+
+    // The demonstration data in the project's data folder must load and give the known table.
+    fs::current_path(repoRoot);
+    if (fs::exists("data/teams.txt")) {
+        FootballLeague demo;
+        FileStore::load(demo);
+        std::vector<Standing> table = demo.calculateStandings();
+        check(demo.getTeams().size() == 6 && demo.getFixtures().size() == 12,
+              "Demonstration data loads six teams and twelve fixtures");
+        check(table.size() == 6 && table[0].getTeamName() == "Kingston Harbour FC" &&
+              table[0].getPoints() == 7 && table[0].getGoalDifference() == 4,
+              "Demonstration data gives Kingston Harbour FC 7 points and +4");
+        check(demo.getTeam("KPFL-006").getStatus() == TeamStatus::Suspended,
+              "Demonstration data keeps one suspended team");
+    }
+    fs::current_path(work);
+    fs::current_path(repoRoot);
+    fs::remove_all(work);
+}
+
 static void testSquads() {
     expectRuleError("Reject a player aged 15", [] {
         Player("P0", "Rajay Brown", 15, "M", 7, "Midfielder");
@@ -735,6 +805,7 @@ static void testPersistence() {
 }
 
 int main() {
+    const std::filesystem::path repoRoot = std::filesystem::current_path();
     try {
         testScores();
         testLeague();
@@ -743,6 +814,7 @@ int main() {
         testReports();
         testVenueAndOfficials();
         testSquads();
+        testSafeLoadAndSampleData(repoRoot);
         testSales();
     } catch (const LeagueRuleError& error) {
         check(false, std::string("Unexpected exception: ") + error.what());

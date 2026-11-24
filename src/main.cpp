@@ -319,7 +319,7 @@ static void runChoice(int choice, FootballLeague& league, const LeagueCommission
             break;
         case 17: {
             // Show one report, then save it as text and CSV in data/reports/.
-            std::cout << "1 Standings  2 Fixtures  3 Official assignments  4 Team status\n";
+            std::cout << "1 Standings  2 Fixtures  3 Official assignments  4 Team status  5 Stadium summary\n";
             int which = readNumber("Report: ");
             Report report;
             std::string file;
@@ -327,7 +327,8 @@ static void runChoice(int choice, FootballLeague& league, const LeagueCommission
             else if (which == 2) { report = LeagueReports::fixtures(league); file = "fixtures"; }
             else if (which == 3) { report = LeagueReports::officialAssignments(league); file = "officials"; }
             else if (which == 4) { report = LeagueReports::teamStatus(league); file = "teams"; }
-            else { throw LeagueRuleError("Choose a report from 1 to 4."); }
+            else if (which == 5) { report = LeagueReports::stadiumSummary(league); file = "stadiums"; }
+            else { throw LeagueRuleError("Choose a report from 1 to 5."); }
             ReportGenerator::print(report, std::cout);
             ReportGenerator::saveAsText(report, "data/reports/" + file + ".txt");
             ReportGenerator::saveAsCsv(report, "data/reports/" + file + ".csv");

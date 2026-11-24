@@ -20,5 +20,6 @@ public:
 
     // Formatting helpers for money and numbers
     static std::string money(double amount);          // "$1,234.50"
+    static std::string moneyCents(long long cents, const std::string& symbol = "J$"); // integer cents -> "J$1,500.00"
     static std::string fixed(double v, int decimals = 2);
 };

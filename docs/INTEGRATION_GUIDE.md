@@ -45,7 +45,7 @@ The league classes use the file-management module's `Persistable` and `Codec`. S
 | `fixtures.txt` | `id\|homeTeamId\|awayTeamId\|stadiumId\|date\|time\|officialIds` |
 | `results.txt` | `fixtureId\|homeScore\|awayScore`, one line per completed fixture |
 
-`FileStore::load` reads teams, stadiums and officials first, then rebuilds each fixture and reattaches its pointers by ID. It builds everything in a scratch league and swaps it in only if all files load, so a damaged file leaves the current data untouched. It does not re-check business rules on load. Standings are never saved, because they are calculated from the results. `FileStore` is a friend of `FootballLeague`. Players, coaches, products and tickets still need their own `serialize()` and `fromRecord()` from their owners.
+`FileStore::load` reads teams, stadiums and officials first, then rebuilds each fixture and reattaches its pointers by ID. It builds everything in a scratch league and swaps it in only if all files load, so a damaged file leaves the current data untouched. It does not re-check business rules on load. Standings are never saved, because they are calculated from the results. `FileStore` is a friend of `FootballLeague`. `FileManager::safeLoad` (load into temporary storage, validate, restore from the `.bak` copy and keep the damaged file as `.corrupt`) is available for any file, and the demonstration data in `data/` is saved in the formats above. Players, coaches, products and tickets still need their own `serialize()` and `fromRecord()` from their owners.
 
 ## Section C merge
 

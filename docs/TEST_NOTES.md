@@ -14,4 +14,10 @@ The C++ test driver covers normal, boundary, and invalid inputs. Run it using th
 | Standings viewed twice after a 2–0 result | The winner stays on 3 points with one match played. |
 | February 29 in a leap year at 23:59, then February 29 in a non-leap year | The valid kickoff is accepted and the invalid date is rejected. |
 
+| A damaged file with no backup, then one with a good `.bak` copy | Safe load rejects the first and leaves the data untouched, and recovers the second from its backup (the damaged copy is kept as `.corrupt`). |
+| A validator that rejects loaded data | Safe load treats it like a damaged file and leaves the data untouched. |
+| Money of 150000, 5 and 0 cents | Shown as J$1,500.00, J$0.05 and J$0.00. |
+| A stadium of 3000 seats at J$1,500.00 | The stadium report shows a full-house gate of J$4,500,000.00. |
+| The demonstration data in `data/` | It loads six teams and twelve fixtures, and Kingston Harbour FC leads with 7 points and +4. |
+
 The console walkthrough in the README also checks that these methods can be reached through the menu.
