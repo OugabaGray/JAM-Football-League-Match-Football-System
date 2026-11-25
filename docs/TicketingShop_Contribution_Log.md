@@ -30,9 +30,11 @@ Name: Sian Sudine
 - Screenshots of passing tests, receipts and restored spectators.
 
 ## Remaining Work
-- Integrate the module with the group's main application.
-- Connect ticket sales to shared fixture and stadium objects.
-- Test the integrated application with the group.
+- Done since this log was first written: the integration lead linked
+  the module into main-menu option 20, ticket sales use the shared
+  fixtures and stadium capacity and price, and the integrated
+  application's tests pass (121 passed, 0 failed).
+- None remaining for the module.
 
 ## Assistance
 AI assistance was used for coding guidance, troubleshooting

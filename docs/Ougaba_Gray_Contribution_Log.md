@@ -26,10 +26,15 @@ Name: Ougaba Gray (2405837)
   price.
 - Created the updated UML class diagram.
 - Wrote the integration guide and test notes.
+- Merged the file management additions (safe loading with backup
+  recovery and money formatting), added the stadium summary report,
+  and saved the demonstration data in the application's file formats.
+- Merged each member's section into the technical report and wrote
+  its conclusion and references.
 
 ## Validation
-- League and sales tests pass together: 109 passed, 0 failed
-  (normal, boundary and invalid inputs).
+- The full test suite passes: 121 passed, 0 failed (normal, boundary
+  and invalid inputs), built and run on a Mac and in a Linux container.
 - Walked through a full match in the menu: register and approve
   two teams, schedule, assign an official, record 2-0, and check
   standings (3 points and 0 points).
@@ -39,12 +44,12 @@ Name: Ougaba Gray (2405837)
 - Git commits by Ougaba Gray in the repository history.
 - docs/INTEGRATION_GUIDE.md, docs/TEST_NOTES.md and the UML file
   docs/Jamaican_Football_League_UML.drawio.
-- Screenshots of the test run and menu walkthrough (to add).
+- Terminal screenshots of the test run and the menu walkthroughs are
+  in the technical report (Figures 7 to 17).
 
 ## Remaining Work
-- Complete the technical report (design, implementation, testing,
-  conclusion, references) and update its "pending" wording.
-- Prepare sample data, the user guide and presentation slides.
+- Assemble the final submission package.
+- Build and rehearse the presentation slides and the demonstration.
 
 ## Assistance
 AI assistance was used for coding guidance, troubleshooting and
