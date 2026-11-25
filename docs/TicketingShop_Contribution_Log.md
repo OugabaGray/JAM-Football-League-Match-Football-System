@@ -1,7 +1,7 @@
 # Individual Contribution Log
 
 Role: Ticketing and Stadium Shop
-Name: Sian Sudine
+Name: Sian Sudine (2405547)
 
 ## Work Completed
 - Implemented Product, Merchandise, FoodItem, Ticket,
