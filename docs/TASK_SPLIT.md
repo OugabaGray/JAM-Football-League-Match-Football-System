@@ -24,13 +24,13 @@
 - [ ] Contribution log and individual reflection
 - [ ] Team and personnel slides
 
-## Jareel (file management)
+## Jareel Edwards (file management)
 - [ ] Prepare the demo sample data in `data/`
 - [ ] Implementation section: persistence and reports (file formats, safe load, four reports)
 - [ ] Contribution log and individual reflection
 - [ ] Persistence and reports slides
 
-## Zidan (fixtures and league operations)
+## Davian Dawkins (fixtures and league operations)
 - [ ] Implementation section: fixtures and league (conflicts, officials, results, standings, custom exception)
 - [ ] Testing & Results section, from the league tests and `docs/TEST_NOTES.md`
 - [ ] Contribution log and individual reflection
@@ -40,7 +40,7 @@
 - Rehearse the demo. Every member speaks and answers a technical question.
 
 ## Order
-1. Sample data (Jareel), test notes (Sian, Zidan)
+1. Sample data (Jareel), test notes (Sian, Davian)
 2. Report sections in parallel
 3. User guide (Tajay)
 4. Ougaba merges the report and slides
